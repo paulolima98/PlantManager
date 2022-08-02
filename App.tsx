@@ -1,12 +1,13 @@
 import React, { useEffect, useCallback } from "react";
 import { SafeAreaView } from "react-native";
 import * as SplashScreen from 'expo-splash-screen';
+import 'react-native-gesture-handler';
 import { 
   useFonts,
   Jost_400Regular,
   Jost_600SemiBold
 } from "@expo-google-fonts/jost";
-import { Confirmation } from "./src/pages/Confirmation";
+import Routes from "./src/routes";
 
 export default function App() {
   const [ fontsLoaded ] = useFonts({
@@ -37,7 +38,7 @@ export default function App() {
 
   return (
     <SafeAreaView style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <Confirmation />
+      <Routes />
     </SafeAreaView>
   );
 }
