@@ -8,26 +8,55 @@ import {
 import { EnviromentButton } from "../components/EnviromentButton";
 
 import { Header } from "../components/Header";
-import api from "../services/api";
+import { PlantCardPrimary } from "../components/PlantCardPrimary";
 
+import api from "../services/api";
 import colors from "../styles/colors";
 import fonts from "../styles/fonts";
 
 interface EnviromentProps {
-  key: string,
-  title: string
+  key: string;
+  title: string;
+}
+interface PlantProps {
+  id: string;
+  name: string;
+  about: string;
+  water_tips: string;
+  photo: string;
+  environments: [string];
+  frequency: {
+    times: number;
+    repeat_every: string;
+  }
 }
 
 export function PlantSelect() {
   const [enviroments, setEnviroment] = useState<EnviromentProps[]>();
+  const [plants, setPlants] = useState<PlantProps[]>();
 
   useEffect(() => { // useEffect é um hook para ser carregado antes da tela
     async function fetchEnviroment() {
       const { data } = await api.get('plants_environments');
-      setEnviroment(data);
+      setEnviroment([
+        {
+          key: 'all',
+          title: 'Todos'
+        },
+        ...data // spread operator
+      ]);
     }
 
     fetchEnviroment();
+  }, []);
+
+  useEffect(() => {
+    async function fetchPlants() {
+      const { data } = await api.get('plants');
+      setPlants(data);
+    }
+
+    fetchPlants();
   }, []);
 
   return (
@@ -48,13 +77,22 @@ export function PlantSelect() {
           renderItem={({ item }) => (
             <EnviromentButton
               title={item.title}
-              active 
+              // active
             />
           )}
           horizontal
           showsHorizontalScrollIndicator={false} // não mostra a barra de rolagem
           contentContainerStyle={styles.enviromentList}
         ></FlatList>
+      </View>
+
+      <View style={styles.plants}>
+        <FlatList 
+          data={plants}
+          renderItem={({ item }) => (
+            <PlantCardPrimary data={item} />
+          )}
+        />
       </View>
     </View>
   );
@@ -87,5 +125,10 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     marginLeft: 32,
     marginVertical: 32
+  },
+  plants: {
+    flex: 1,
+    paddingHorizontal: 32,
+    justifyContent: 'center'
   }
 });
