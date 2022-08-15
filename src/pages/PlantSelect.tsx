@@ -7,6 +7,7 @@ import {
   ActivityIndicator
 } from "react-native";
 import { EnviromentButton } from "../components/EnviromentButton";
+import { useNavigation } from "@react-navigation/native";
 
 import { Header } from "../components/Header";
 import { PlantCardPrimary } from "../components/PlantCardPrimary";
@@ -42,7 +43,8 @@ export function PlantSelect() {
 
   const [page, setPage] = useState(1);
   const [loadingMore, setLoadingMore] = useState(false);
-  const [loadedAll, setLoadedAll] = useState(false);
+
+  const navigation = useNavigation();
 
   function handleEnviromentSelected(enviroment: string) {
     setEnviromentSelected(enviroment);
@@ -63,7 +65,7 @@ export function PlantSelect() {
       return setLoading(true);
     }
     if (page > 1) {
-      setPlants(oldValue => [...oldValue, ...data])
+      setPlants(oldValue => [...oldValue, ...data]);
     } else {
       setPlants(data);
       setFilteredPlants(data);
@@ -81,6 +83,10 @@ export function PlantSelect() {
     setLoadingMore(true);
     setPage(oldValue => oldValue + 1);
     fetchPlants();
+  }
+
+  function handlePlantSelect(plant: PlantProps) {
+    navigation.navigate('PlantSave', { plant });
   }
 
   useEffect(() => { // useEffect é um hook para ser carregado antes da tela
@@ -121,6 +127,7 @@ export function PlantSelect() {
       <View>
         <FlatList
           data={enviroments}
+          keyExtractor={(item) => String(item.key)}
           renderItem={({ item }) => (
             <EnviromentButton
               title={item.title}
@@ -137,8 +144,12 @@ export function PlantSelect() {
       <View style={styles.plants}>
         <FlatList 
           data={filteredPlants}
+          keyExtractor={(item) => String(item.id)}
           renderItem={({ item }) => (
-            <PlantCardPrimary data={item} />
+            <PlantCardPrimary 
+              data={item}
+              onPress={() => handlePlantSelect(item)}
+            />
           )}
           showsVerticalScrollIndicator={false}
           numColumns={2}
