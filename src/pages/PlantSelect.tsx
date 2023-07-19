@@ -6,10 +6,10 @@ import {
   FlatList,
   ActivityIndicator
 } from "react-native";
-import { EnviromentButton } from "../components/EnviromentButton";
 import { useNavigation } from "@react-navigation/native";
 
 import { Header } from "../components/Header";
+import { EnviromentButton } from "../components/EnviromentButton";
 import { PlantCardPrimary } from "../components/PlantCardPrimary";
 import { Load } from "../components/Load";
 
