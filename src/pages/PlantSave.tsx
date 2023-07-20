@@ -14,6 +14,7 @@ import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { useRoute } from '@react-navigation/native';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { format, isBefore } from 'date-fns';
+import { PlantProps } from '../libs/storage';
 
 import { Button } from '../components/Button';
 
@@ -22,18 +23,7 @@ import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 interface Params {
-  plant: {
-    id: string;
-    name: string;
-    about: string;
-    water_tips: string;
-    photo: string;
-    environments: [string];
-    frequency: {
-      times: number;
-      repeat_every: string;
-    }
-  }
+  plant: PlantProps
 }
 
 export function PlantSave() {
@@ -44,7 +34,6 @@ export function PlantSave() {
   const { plant } = route.params as Params;
 
   function handleChangeTime(event: Event, dateTime: Date | undefined) {
-    console.log(dateTime)
     if (Platform.OS === 'android') {
       setShowDatePicker(oldState => !oldState);
     }
@@ -99,7 +88,7 @@ export function PlantSave() {
             <DateTimePicker 
               value={selectedDateTime}
               mode="time"
-              // display="spinner"
+              display="spinner" // style
               onChange={handleChangeTime}
             />
           )

@@ -40,12 +40,15 @@ export function UserIdentification () {
 
   async function handleSubmit() {
     if (!name) {
-      return Alert.alert('Diz aí como podemos te chamar 😕')
+      return Alert.alert('Diz aí como podemos te chamar 😕');
     }
 
-    await AsyncStorage.setItem('@plantmanager:user', name);
-
-    navigation.navigate('Confirmation');
+    try {
+      await AsyncStorage.setItem('@plantmanager:user', name);
+      navigation.navigate('Confirmation');
+    } catch {
+      return Alert.alert('Não foi possível salvar seu nome. 😕');
+    }
   }
 
   return (
